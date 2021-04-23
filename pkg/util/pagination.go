@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/unknwon/com"
 
-	"github.com/fmy1993/go-gin-example/pkg/setting"
+	"github.com/fmy1993/go-gin-admain/pkg/setting"
 )
 
 // 得到page具体的页数,默认都是发送页数的get请求

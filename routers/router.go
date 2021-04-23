@@ -1,8 +1,8 @@
 package routers
 
 import (
-	"github.com/fmy1993/go-gin-example/pkg/setting"
-	"github.com/fmy1993/go-gin-example/routers/api/v1"
+	"github.com/fmy1993/go-gin-admain/pkg/setting"
+	v1 "github.com/fmy1993/go-gin-admain/routers/api/v1"
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,7 +23,7 @@ func InitRouter() *gin.Engine {
 			Group creates a new router group. You should add all the routes that have common middlewares or the same path prefix.
 		For example, all the routes that use a common middleware for authorization could be grouped.
 	*/
-	r.Group("api/v1", v1.AddTag)
-
+	apiv1 := r.Group("api/v1")
+	apiv1.GET("tags", v1.GetTags)
 	return r
 }
