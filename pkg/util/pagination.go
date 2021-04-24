@@ -7,8 +7,8 @@ import (
 	"github.com/fmy1993/go-gin-admain/pkg/setting"
 )
 
-// 得到page具体的页数,默认都是发送页数的get请求
-// 使用com包,只需要传入第几页就行，默认get请求
+// 默认[get] ?page=x
+// 第一页返回0
 func GetPage(c *gin.Context) int { //返回分页的int
 	result := 0
 	page, _ := com.StrTo(c.Query("page")).Int() //这里似乎就是处理一下page的参数，似乎不一定非要用这个包

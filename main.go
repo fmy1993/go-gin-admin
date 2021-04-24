@@ -30,7 +30,7 @@ func main() {
 	//因此这里要用指针，而不是传递副本
 	s := &http.Server{ // %d 十进制的整数，Sprintf 作用是按要求格式字符串
 		Addr:           fmt.Sprintf(":%d", setting.HTTPPort),
-		Handler:        router, //gin.engine 是作为一个handler传给net的http包的
+		Handler:        router, //gin.engine 是作为一个handler传给net/http包的,
 		ReadTimeout:    setting.ReadTimeout,
 		WriteTimeout:   setting.WriteTimeout,
 		MaxHeaderBytes: 1 << 20, // 512k

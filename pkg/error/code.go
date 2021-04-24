@@ -1,6 +1,6 @@
 package error
 
-//枚举错误码
+//枚举HTTP状态码
 const (
 	SUCCESS        = 200
 	ERROR          = 500

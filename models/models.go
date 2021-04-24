@@ -16,6 +16,7 @@ import (
 // gorm包的一个上下文
 var db *gorm.DB
 
+//每个实体类都会用到的字段，作为引用放在其他结构体内部，抽象共同
 type Model struct {
 	//主键有特殊语法声明，并且使用gorm包
 	ID         int `gorm:"primary_key" json:"id"`
@@ -23,6 +24,7 @@ type Model struct {
 	ModifiedOn int `json:"modified_on"`
 }
 
+// 直接写在函数的构造函数中，没有写get函数
 func init() {
 	var (
 		err                                               error
