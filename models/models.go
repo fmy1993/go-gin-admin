@@ -1,3 +1,12 @@
+/*
+ * @Descripttion: 连接数据库的逻辑，以及定义每张表通用的字段
+ * @version:
+ * @Author: fmy1993
+ * @Date: 2021-04-07 16:04:11
+ * @LastEditors: fmy1993
+ * @LastEditTime: 2021-04-25 10:26:27
+ */
+
 package models
 
 import (
@@ -24,7 +33,7 @@ type Model struct {
 	ModifiedOn int `json:"modified_on"`
 }
 
-// 直接写在函数的构造函数中，没有写get函数
+// 直接写在函数的构造函数中，没有写get函数,那么其他包直接取到db指针就行了
 func init() {
 	var (
 		err                                               error
