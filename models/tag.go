@@ -4,7 +4,7 @@
  * @Author: fmy1993
  * @Date: 2021-04-23 17:02:57
  * @LastEditors: fmy1993
- * @LastEditTime: 2021-04-25 11:00:06
+ * @LastEditTime: 2021-04-26 10:06:44
  */
 package models
 
@@ -24,10 +24,12 @@ type Tag struct {
 }
 
 /**
- * @description: 就是gorm框架的封装，参数全部是gorm框架需要的sql参数
+ * @description: 分页查询tags列表
  * @test: test content
- * @param maps interface{} 是 sql where的条件
- * @return ： tags gorm查询的结果集
+ * @param {int} pageNum 分页的页数
+ * @param {int} pageSize 分页的页面大小
+ * @param {interface{}} maps 是 sql where的条件,以map形式传给gorm
+ * @return tags gorm查询的结果集
  * @author: fmy1993
  */
 func GetTags(pageNum int, pageSize int, maps interface{}) (tags []Tag) { //直接把返回值作为参数声明在返回值域，可以在函数体直接使用
@@ -39,7 +41,7 @@ func GetTags(pageNum int, pageSize int, maps interface{}) (tags []Tag) { //直�
 
 // go 这种直接用返回值的语法应该不用指针的话可能也会返回一个副本
 /**
- * @description: 得到总的记录数
+ * @description: 得到总的记录数，就是总的记录数，显示在前台页面
  * @test: test content
  * @param {interface{}} maps gorm sql where的条件
  * @return {*}
@@ -76,7 +78,7 @@ func ExistTagByName(name string) bool {
 func ExistTagByID(id int) bool {
 	var tag Tag
 	db.Select("id").Where("id=?", id).First(&tag)
-	return tag.ID > 0 //判断有记录的一个写法
+	return tag.ID > 0 //判断有记录的一个写法,虽然tag结构体没有id，但是在model声明的结构体的字段依然能取到
 }
 func DeleteTagById(id int) bool {
 	db.Where("id=?", id).Delete(&Tag{})

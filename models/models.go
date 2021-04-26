@@ -4,7 +4,7 @@
  * @Author: fmy1993
  * @Date: 2021-04-07 16:04:11
  * @LastEditors: fmy1993
- * @LastEditTime: 2021-04-25 10:26:27
+ * @LastEditTime: 2021-04-26 09:11:40
  */
 
 package models
@@ -25,10 +25,11 @@ import (
 // gorm包的一个上下文
 var db *gorm.DB
 
-//每个实体类都会用到的字段，作为引用放在其他结构体内部，抽象共同
+//每个实体类都会用到的字段，作为引用放在其他结构体内部，抽象共同，用了特殊的语法声明了作为id是作为gorm框架的主键
+//那么在 scope *gorm.Scope 里就可以拿到这个结构体里的其他字段(会默认是公共的字段)
 type Model struct {
 	//主键有特殊语法声明，并且使用gorm包
-	ID         int `gorm:"primary_key" json:"id"`
+	ID         int `gorm:"primary_key" json:"id"` //注意公共字段的声明
 	CreatedOn  int `json:"created_on"`
 	ModifiedOn int `json:"modified_on"`
 }
