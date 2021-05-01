@@ -4,7 +4,7 @@
  * @Author: fmy1993
  * @Date: 2021-04-30 17:10:36
  * @LastEditors: fmy1993
- * @LastEditTime: 2021-05-01 10:44:39
+ * @LastEditTime: 2021-05-01 10:45:51
  */
 
 package v1
@@ -113,7 +113,7 @@ func EditArticle(c *gin.Context) {
 	if !valid.HasErrors() {
 		code = error.SUCCESS
 		if models.ExistArticleById(id) { //检查文章是否存在
-			if models.ExistTagByID(tagid) { //检查tag是否存在
+			if models.ExistTagByID(tagId) { //检查tag是否存在
 				data["tag_id"] = tagId
 				if title != "" {
 					data["title"] = title
