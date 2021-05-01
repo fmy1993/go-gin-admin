@@ -4,7 +4,7 @@
  * @Author: fmy1993
  * @Date: 2021-04-23 08:20:51
  * @LastEditors: fmy1993
- * @LastEditTime: 2021-04-25 16:34:29
+ * @LastEditTime: 2021-04-30 17:15:55
  */
 package routers
 
@@ -41,8 +41,8 @@ func InitRouter() *gin.Engine {
 
 	apiv1.GET("/article", v1.GetArticleList)
 	apiv1.GET("/article/:id", v1.GetArticleById)
-	apiv1.PUT("/article/:id", v1.EditArticle)
-	apiv1.DELETE("artile/:id", v1.DeleteArticle)
+	//apiv1.PUT("/article/:id", v1.EditArticle)
+	//apiv1.DELETE("artile/:id", v1.DeleteArticle)
 
 	return r
 }

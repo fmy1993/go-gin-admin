@@ -4,7 +4,7 @@
  * @Author: fmy1993
  * @Date: 2021-04-25 16:36:50
  * @LastEditors: fmy1993
- * @LastEditTime: 2021-04-26 20:39:24
+ * @LastEditTime: 2021-04-27 11:33:43
  */
 package models
 
@@ -15,8 +15,9 @@ import (
 )
 
 type Article struct {
-	Model             //这里model连名字都不需要，因为只是给gorm操作的
-	TagId      int    `json:"tagid" gorm:"index"` //gorm框架声明索引
+	Model //这里model连名字都不需要，因为只是给gorm操作的
+	// gorm会自动对类名+ID（必须都大写）的属性进行管理，将其拆分为 类名+ID,然后可以对这个类做关联
+	TagID      int    `json:"tagid" gorm:"index"` //gorm框架声明索引
 	Tag        Tag    `json:"tag"`                //Tag        int    `json:"tag"`
 	Title      string `json:"title"`
 	Desc       string `json:"desc"`
@@ -55,16 +56,19 @@ func (article *Article) BeforeUpdate(scope *gorm.Scope) error {
 }
 
 /**
- * @description:分页查询文章
- * @test: gorm分页用法，先where,再页大小(limit)，再页数(offset)，最后find以参数形式将结果集传出给参数指针
- * @param {int} pageSize
- * @param {int} pageNum
- * @param {interface{}} maps
- * @return {*}
- * @author: fmy1993
- */
+* @description:分页查询文章
+* @test: gorm分页用法，先where,再页大小(limit)，再页数(offset)，最后find以参数形式将结果集传出给参数指针,
+这里使用gorm 的preload关键字来避免对多条数据的分次多次关联对db的影响（思路是把id取出来，放在in做一次子查询）
+article和标签的关系是一对多，对应会是有多条article数据存着不同的tag
+* @param {int} pageSize
+* @param {int} pageNum
+* @param {interface{}} maps
+* @return {*}
+* @author: fmy1993
+*/
 func GetArticlePage(pageSize int, pageNum int, maps interface{}) (article []Article) {
-	db.Where(maps).Limit(pageSize).Offset(pageNum).Find(&article)
+	//db.Where(maps).Limit(pageSize).Offset(pageNum).Find(&article)
+	db.Preload("Tag").Where(maps).Limit(pageSize).Offset(pageNum)
 	return
 }
 
@@ -79,10 +83,19 @@ func GetArticleTotal(maps interface{}) (total int) {
 	db.Model(&Article{}).Where(maps).Count(&total)
 	return
 }
+
+/**
+ * @description:根据id 得到文章
+ * @test: gorm 关联的实现：1. StructID(ID大写) gorm会自动寻找表名为prifix_struct的类(数据库为小写) 2.使用Ralated关键字将对应的表数据存在对应的结构体属性中
+ * @param {int} id
+ * @return {*}
+ * @author: fmy1993
+ */
 func GetArticleById(id int) (article Article) {
 
-	db.Where("id=?", id).Find(&article) //示例这里用的是first，能不能用find？
-	db.Model(&article).Related(&article.Tag)
+	//db.Where("id=?", id).Find(&article) //示例这里用的是first，能不能用find?不能，因为文章可能有多个属性
+	db.Where("id=?", id).First(&article)
+	db.Model(&article).Related(&article.Tag) //也就是把关联后的数据存入article的Tag属性对应的类中
 	return
 }
 func ExistArticleById(id int) bool {
@@ -98,7 +111,7 @@ func ExistArticleById(id int) bool {
 
 /**
  * @description:根据传入的map来更新数据
- * @test: 使用gorm的model关键字传入指针来确定对应的数据（表）
+ * @test: 使用gorm的model关键字传入指针来确定对应的数据（表）,gorm的model其实就相当于得到一个表映射的类
  * @param {int} id 要修改数据的id
  * @param {interface{}} data 这里传入一个map ，就是可以表现 column=value的形式
  * @return {*}
@@ -139,7 +152,7 @@ func AddArticle(data map[string]interface{}) bool {
 		Content:  data["content"].(string),
 		Desc:     data["desc"].(string),
 		CreateBy: data["created_by"].(string),
-		TagId:    data["tag_id"].(int),
+		TagID:    data["tag_id"].(int),
 		State:    data["state"].(int),
 	})
 	return true
